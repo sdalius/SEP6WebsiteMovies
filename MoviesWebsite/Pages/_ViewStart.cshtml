@@ -1,0 +1,12 @@
+﻿@inject MoviesWebsite.Services.IUserService userService
+@{
+    @if (userService.isLoggedIn())
+    {
+        Layout = "~/Pages/Shared/_MemberLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Pages/Shared/_Layout.cshtml";
+    }
+    
+}

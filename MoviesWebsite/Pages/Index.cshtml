@@ -1,0 +1,40 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<table class="table">
+    @if (@Model.bIsLoggedIn)
+    {
+        <div class="text-center">
+            <h1 class="display-4">Top 100 Movie list</h1>
+            <h6>@Model.Msg</h6>
+            @foreach (var movie in @Model.MovieList)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(e => movie.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(e => movie.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(e => movie.Year)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+            </div>
+        }
+        else
+        {
+            <h4 class="display-4">You are not logged in.</h4>
+            <form method="get">
+            <button type="submit" asp-page="">Login</button>
+            </form>
+        }
+</table>
