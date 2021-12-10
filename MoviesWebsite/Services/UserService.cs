@@ -1,67 +1,58 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using MoviesWebsite.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MoviesWebsite.Services
 {
     public class UserService : IUserService
     {
-        public HttpClient _httpClient { get; }
-        public AppSettings _appSettings { get; }
-        private User _user { get; set; }
-
-        public UserService(HttpClient httpClient, IOptions<AppSettings> appSettings)
+        public async Task<Users> LogInAsync(string username1, string password1)
         {
-            _appSettings = appSettings.Value;
-            _httpClient = httpClient;
-        }
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri("https://movieapisep6.azurewebsites.net/Movies/");
 
-        public int LogIn(string username1, string password1)
-        {
-            _user = new User();
-
-            var RequestBody = new { username = username1, password = password1 };
-            var stringContent = new StringContent(JsonConvert.SerializeObject(RequestBody), Encoding.UTF8, "application/json");
-            var tokenResponse = _httpClient.PostAsync(_appSettings.APIWebsite + "/Movies/login", stringContent).Result;
-            if (tokenResponse.IsSuccessStatusCode)
+            var login = await hc.PostAsJsonAsync("login", new UserLogin { Username = username1, Password = password1 });
+            
+            if (login.IsSuccessStatusCode)
             {
-                var JsonContent = tokenResponse.Content.ReadAsStringAsync().Result;
-                _user = JsonConvert.DeserializeObject<User>(JsonContent);
-                return (int)tokenResponse.StatusCode;
+                Users finallytoken = await login.Content.ReadFromJsonAsync<Users>();
+                return finallytoken;
             }
             else
-            {
-                return (int)tokenResponse.StatusCode;
-            }
-        }
-
-        public int Register(string username1, string password1)
-        {
-            var registerModel = new RegistrationModel { Username = username1, Password = password1 };
-            var stringContent = new StringContent(JsonConvert.SerializeObject(registerModel), Encoding.UTF8, "application/json");
-            var tokenResponse = _httpClient.PostAsync(_appSettings.APIWebsite + "/Movies/register", stringContent).Result;
-            if (tokenResponse.IsSuccessStatusCode)
-            {
-                return (int)tokenResponse.StatusCode;
-            }
-            else
-            {
-                return (int)tokenResponse.StatusCode;
-            }
-        }
-        public List<Movie> GetTopNumMovies(int numOfMovies)
-        {
-            if (_user == null || _user.Token == "")
             {
                 return null;
+            } 
+        }
+        public async Task<int> Register(string username1, string password1)
+        {
+            HttpClient hc = new HttpClient();
+            var registerModel = new RegistrationModel { Username = username1, Password = password1 };
+            var stringContent = new StringContent(JsonConvert.SerializeObject(registerModel), Encoding.UTF8, "application/json");
+            var tokenResponse = await hc.PostAsync("https://movieapisep6.azurewebsites.net" + "/Movies/register", stringContent);
+            if (tokenResponse.IsSuccessStatusCode)
+            {
+                return (int)tokenResponse.StatusCode;
             }
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _user.Token);
-            var APIResponse = _httpClient.GetAsync(_appSettings.APIWebsite + "/Movies/ReturnTopNumberOfMovies/?numOfMovies=" + numOfMovies).Result;
+            else
+            {
+                return (int)tokenResponse.StatusCode;
+            }
+        }
+        public List<Movie> GetTopNumMovies(string Token, int numOfMovies)
+        {
+            HttpClient hc = new HttpClient();
+            hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var APIResponse = hc.GetAsync("https://movieapisep6.azurewebsites.net" + "/Movies/ReturnTopNumberOfMovies/?numOfMovies=" + numOfMovies).Result;
             if (APIResponse.IsSuccessStatusCode)
             {
                 var JsonContent = APIResponse.Content.ReadAsStringAsync().Result;
@@ -73,24 +64,5 @@ namespace MoviesWebsite.Services
                 return null;
             }
         }
-
-        public void Logout()
-        {
-            _user = null;
-        }
-
-        public bool isLoggedIn()
-        {
-            if (_user == null || _user.Token == "")
-            {
-                
-                return false;
-            }
-            Console.WriteLine(_user.Token);
-            return true;
-        }
-
-
-
     }
 }

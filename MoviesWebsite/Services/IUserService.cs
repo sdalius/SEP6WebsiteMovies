@@ -8,10 +8,8 @@ namespace MoviesWebsite.Services
 {
     public interface IUserService
     {
-        List<Movie> GetTopNumMovies(int numOfMovies);
-        int LogIn(string username1, string password1);
-        bool isLoggedIn();
-        void Logout();
-        int Register(string username1, string password1);
+        List<Movie> GetTopNumMovies(string Token, int numOfMovies);
+        Task<Users> LogInAsync(string username1, string password1);
+        Task<int> Register(string username1, string password1);
     }
 }

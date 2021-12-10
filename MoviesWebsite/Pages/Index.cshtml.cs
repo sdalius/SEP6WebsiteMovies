@@ -21,27 +21,22 @@ namespace MoviesWebsite.Pages
         public string Msg { get; set; }
         public List<Movie> MovieList { get; set; }
         public bool bIsLoggedIn { get; set; } = false;
-
-        private IUserService _userService { get; }
+        public IUserService _userService { get; set; }
 
         public IndexModel(IUserService userService)
         {
             _userService = userService;
         }
-
         public void OnGet()
         {
-            bIsLoggedIn = _userService.isLoggedIn();
-            Console.WriteLine("Should be false" + bIsLoggedIn);
-            if (bIsLoggedIn)
+            if (HttpContext.Session.GetString("JWToken") != null)
             {
-                MovieList = _userService.GetTopNumMovies(10);
-                Console.WriteLine("Should be true" + bIsLoggedIn);
+                MovieList = _userService.GetTopNumMovies(HttpContext.Session.GetString("JWToken"), 10);
             }
         }
-        public IActionResult Logout()
+        public void OnPostToken()
         {
-            return RedirectToPage("Login");
+
         }
     }
 }

@@ -1,12 +1,11 @@
-﻿@inject MoviesWebsite.Services.IUserService userService
+﻿@using Microsoft.AspNetCore.Http
 @{
-    @if (userService.isLoggedIn())
-    {
-        Layout = "~/Pages/Shared/_MemberLayout.cshtml";
-    }
-    else
+    if (Context.Session.GetString("JWToken") == null)
     {
         Layout = "~/Pages/Shared/_Layout.cshtml";
     }
-    
+    else
+    {
+        Layout = "~/Pages/Shared/_MemberLayout.cshtml";
+    }
 }

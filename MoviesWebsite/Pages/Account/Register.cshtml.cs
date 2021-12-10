@@ -30,9 +30,9 @@ namespace MoviesWebsite.Pages
         {
         }
 
-        public IActionResult OnPost()
+        public ActionResult OnPost()
         {
-            Console.WriteLine(registerUser.Password +  passwordAgain);
+            Console.WriteLine(registerUser.Password + passwordAgain);
             if (registerUser.Password != passwordAgain)
             {
                 errorMessage = "Passwords doesn't match, please type the right passwords again";
@@ -47,12 +47,13 @@ namespace MoviesWebsite.Pages
                 return Page();
             }
 
-            int responseCode = _userService.Register(registerUser.Username, registerUser.Password);
-            if (responseCode == 200)
+            var responseCode = _userService.Register(registerUser.Username, registerUser.Password);
+            if (responseCode.Result == 200)
             {
                 successMessage = "Sign up successfully, back to login page";
                 return RedirectToPage("/Account/RegistrationSuccessful");
             }
+
             errorMessage = "Username already exists or other error";
             return Page();
         }

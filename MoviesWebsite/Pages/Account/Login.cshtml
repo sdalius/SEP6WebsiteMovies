@@ -12,15 +12,15 @@
 <body>
 
     <h3>Login</h3>
-    <form method="post" asp-page="Login">
+    <form method="post"asp-page-handler="Login" asp-page="Login">
         <table>
             <tr>
                 <td>Username</td>
-                <td><input type="text" asp-for="@Model.Username" /></td>
+                <td><input type="text" asp-for="@Model.Username1" /></td>
             </tr>
             <tr>
                 <td>Password</td>
-                <td><input type="password" asp-for="@Model.Password" /></td>
+                <td><input type="password" asp-for="@Model.Password1" /></td>
             </tr>
             <tr>
                 <td>&nbsp;</td>

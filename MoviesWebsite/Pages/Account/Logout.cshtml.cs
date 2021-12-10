@@ -10,15 +10,9 @@ namespace MoviesWebsite.Account
 {
     public class LogoutModel : PageModel
     {
-        private IUserService _userService { get; }
-
-        public LogoutModel(IUserService userService)
-        {
-            _userService = userService;
-        }
         public void OnGet()
         {
-            _userService.Logout();
+            HttpContext.Session.Clear();
         }
     }
 }

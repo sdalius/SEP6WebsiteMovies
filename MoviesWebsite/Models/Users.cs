@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace MoviesWebsite.Models
 {
-    public class User
+    public class Users
     {
+        [JsonProperty("userID")]
         public int userID { get; set; }
+        [JsonProperty("username")]
         public string username { get; set; }
         [JsonProperty("Token")]
         public string Token { get; set; }
