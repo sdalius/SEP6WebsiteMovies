@@ -1,0 +1,35 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@model MoviesWebsite.Pages.MyToplistModel
+@{
+}
+@if (HttpContext.Session.GetString("JWToken") != null)
+{
+    <div class="text-center">
+        <h1 class="display-4">My top list</h1>
+        <table class="table">
+            @Model.Msg
+            @foreach (var movie in @Model.TearListMovies)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(e => movie.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(e => movie.Year)
+                    </td>
+                    <td>
+                        <form asp-page-handler="RemoveMovieFromToplist" asp-route-movie_id="@movie.Id" method="post">
+                            <input type="submit" value="Remove from toplist" />
+                            <button><a href="@Url.Page("./MovieDetails/MovieDetails", new { sendId = movie.Id })">Details</a></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+else
+{
+    <h4 class="display-4">You are not logged in.</h4>
+}

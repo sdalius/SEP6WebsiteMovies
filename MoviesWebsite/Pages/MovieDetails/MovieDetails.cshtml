@@ -1,0 +1,63 @@
+﻿@page "{sendId:int}"
+@using Microsoft.AspNetCore.Http
+@model MoviesWebsite.Pages.MovieDetails.MovieDetailsModel
+@{
+}
+@if (HttpContext.Session.GetString("JWToken") == null)
+{
+    <h4 class="display-4">You are not logged in.</h4>
+    <form method="POST">
+        <button type="submit" asp-page-handler="Login">Log in</button>
+    </form>
+}
+else if (Model.movieInfo == null)
+{
+    <h4 class="display-4">This movie does not exist in our database.</h4>
+    <form>
+        <button type="submit" asp-page-handler="Back">Go back</button>
+    </form>
+}
+else
+{
+    <h1>Movie details:</h1>
+    <div class="card mb-3" style="max-width: 800px;">
+        <div class="row no-gutters">
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.movieInfo.Title</h5>
+                    <p class="card-text">Release date: @Model.movieInfo.Year</p>
+                    <p class="card-text">Rating: @Model.movieInfo.Rating</p>
+                    <p class="card-text">Votes: @Model.movieInfo.Votes</p>
+                    <h5 class="card-title">Actors</h5>
+                    @foreach (var stars in Model.movieInfo.Stars)
+                    {
+                        <p class="card-text">Name: @stars.Name</p>
+                        @if (@stars.Birth == null)
+                        {
+                            <p class="card-text">Birth date: Unknown</p>
+                        }
+                        else
+                        {
+                            <p class="card-text">Birth date: @stars.Birth</p>
+                        }
+                    }
+                    <h5 class="card-title">Directors</h5>
+                    @foreach (var directors in Model.movieInfo.Directors)
+                    {
+                        <p class="card-text">Name: @directors.Name</p>
+                        @if (@directors.Birth == null)
+                        {
+                            <p class="card-text">Birth date: Unknown</p>
+                        }
+                        else
+                        {
+                            <p class="card-text">Birth date: @directors.Birth</p>
+                        }
+                    }
+                    <p class="card-text">Plot: @Model.movieInfo.Plot</p>
+                    <img src="@Model.movieInfo.Poster">
+                </div>
+            </div>
+        </div>
+    </div>
+}
