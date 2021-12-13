@@ -7,15 +7,15 @@
 @if (HttpContext.Session.GetString("JWToken") == null)
 {
     <h4 class="display-4">You are not logged in.</h4>
-    <form method="POST">
-        <button type="submit" asp-page-handler="Login">Log in</button>
+    <form>
+        <button type="submit" asp-page="/Account/Login">Log in</button>
     </form>
 }
 else if (Model.personInfo == null)
 {
     <h4 class="display-4">This star or person does not exist in our database.</h4>
     <form>
-        <button type="submit" asp-page-handler="Back">Go back</button>
+        <input type="button" onclick="history.go(-1)" value="Go back" />
     </form>
 }
 else
@@ -34,5 +34,8 @@ else
                 </div>
             </div>
         </div>
+        <form>
+            <input type="button" onclick="history.go(-1)" value="Go back" />
+        </form>
     </div>
 }

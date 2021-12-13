@@ -32,15 +32,22 @@
                         @Html.DisplayFor(e => person.Birth)
                     </td>
                     <td>
-                    <a href="@Url.Page("/Statistics/ActorMovieAverageRatingDetailed", new { personId = person.Id })">See the statistics</a>
+                        <a href="@Url.Page("/Statistics/ActorMovieAverageRatingDetailed", new { personId = person.Id })">See the statistics</a>
                     </td>
                 </tr>
 
             }
         </table>
+        <form>
+            <input type="button" onclick="history.go(-1)" value="Go back" />
+        </form>
     </div>
 }
 else
 {
     <h4 class="display-4">You are not logged in.</h4>
+    <form>
+        <button type="submit" asp-page="/Account/Login">Log in</button>
+    </form>
+
 }

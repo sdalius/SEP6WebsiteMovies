@@ -27,15 +27,5 @@ namespace MoviesWebsite.Pages.Statistics
                 personInfo = _userService.StarRatingOfAllMoviesAsync(HttpContext.Session.GetString("JWToken"), personId);
             }
         }
-
-        public ActionResult OnPostLogin()
-        {
-            return RedirectToPage("/Account/Login");
-        }
-
-        public ActionResult OnPostBack()
-        {
-            return RedirectToPage("/ActorMovieAverageRating");
-        }
     }
 }
