@@ -14,5 +14,8 @@ namespace MoviesWebsite.Services
         List<Movie> GetToptierList(string Token);
         Task<int> AddToToptierListAsync(string Token, int movieId);
         Task<int> RemoveMovieFromTierlist(string getString, int movieId);
+        List<Person> ReturnNumberOfStars(string Token, int numOfStars);
+        List<Person> GetStarsAccordingToName(string Token, string name);
+        StarRating StarRatingOfAllMoviesAsync(string Token, int star_id);
     }
 }

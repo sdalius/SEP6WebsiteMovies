@@ -14,6 +14,5 @@ namespace MoviesWebsite.Models
         public string username { get; set; }
         [JsonProperty("Token")]
         public string Token { get; set; }
-
     }
 }

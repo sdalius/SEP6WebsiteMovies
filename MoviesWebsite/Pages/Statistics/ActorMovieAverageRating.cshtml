@@ -1,4 +1,46 @@
 ﻿@page
+@using Microsoft.AspNetCore.Http
 @model MoviesWebsite.Pages.Statistics.ActorMovieAverageRatingModel
 @{
+}
+@if (HttpContext.Session.GetString("JWToken") != null)
+{
+    <div class="text-center">
+        <h1 class="display-4">Choose an actor</h1>
+        @using (Html.BeginForm())
+        {
+            <p style="text-align:left">
+                Find by actor name: @Html.TextBox("name")
+                <input type="submit" value="Search" asp-page-handler="FindStarByName" />
+            </p>
+        }
+        <table class="table">
+            @foreach (var (person, index) in @Model.personList.Select((v, i) => (v, i + 1)))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(e => (index))
+                    </td>
+                    <td>
+                        @Html.DisplayFor(e => person.Name)
+                    </td>
+                    <td>
+                        @if (person.Birth == null)
+                        {
+                            @Html.Display("Unknown")
+                        }
+                        @Html.DisplayFor(e => person.Birth)
+                    </td>
+                    <td>
+                    <a href="@Url.Page("/Statistics/ActorMovieAverageRatingDetailed", new { personId = person.Id })">See the statistics</a>
+                    </td>
+                </tr>
+
+            }
+        </table>
+    </div>
+}
+else
+{
+    <h4 class="display-4">You are not logged in.</h4>
 }

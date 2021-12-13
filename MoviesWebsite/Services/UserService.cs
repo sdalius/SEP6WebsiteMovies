@@ -130,5 +130,70 @@ namespace MoviesWebsite.Services
             var tokenResponse = await hc.PostAsync("https://movieapisep6.azurewebsites.net" + "/Movies/RemoveMovieFromTierlist", stringContent);
             return (int)tokenResponse.StatusCode;
         }
+
+        public List<Person> ReturnNumberOfStars(string Token, int numOfStars)
+        {
+            if (Token == null)
+            {
+                return null;
+            }
+            HttpClient hc = new();
+            hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var APIResponse = hc.GetAsync("https://movieapisep6.azurewebsites.net/Movies/ReturnNumberOfStars?numOfStars=" + numOfStars).Result;
+            if (APIResponse.IsSuccessStatusCode)
+            {
+                var JsonContent = APIResponse.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<List<Person>>(JsonContent);
+            }
+            Console.WriteLine("APIResponse, Error : " + APIResponse.StatusCode);
+            return null;
+        }
+
+        public List<Person> GetStarsAccordingToName(string Token, string name)
+        {
+            if (Token == null || name == null || name == "")
+            {
+                return null;
+            }
+            HttpClient hc = new();
+            hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var APIResponse = hc.GetAsync("https://movieapisep6.azurewebsites.net/Movies/ReturnNumberOfStarsByName?name=" + name).Result;
+            if (APIResponse.IsSuccessStatusCode)
+            {
+                var JsonContent = APIResponse.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<List<Person>>(JsonContent);
+            }
+            Console.WriteLine("APIResponse, Error : " + APIResponse.StatusCode);
+            return null;
+        }
+        public StarRating StarRatingOfAllMoviesAsync(string Token, int star_id)
+        {
+            if (Token == null || star_id < 0)
+            {
+                return null;
+            }
+            HttpClient hc = new();
+            hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var APIResponse = hc.GetAsync("https://movieapisep6.azurewebsites.net/Movies/StarRatingOfAllMovies/?star_id=" + star_id).Result;
+            if (APIResponse.IsSuccessStatusCode)
+            {
+                var JsonContent = APIResponse.Content.ReadAsStringAsync().Result;
+                try
+                {
+                    var makeObject = JsonConvert.DeserializeObject<List<StarRating>>(JsonContent);
+                    if (makeObject[0] != null) return makeObject[0];
+                }
+                catch (JsonSerializationException)
+                {
+                    return null;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return null;
+                }
+            }
+            Console.WriteLine("APIResponse, Error : " + APIResponse.StatusCode);
+            return null;
+        }
     }
 }

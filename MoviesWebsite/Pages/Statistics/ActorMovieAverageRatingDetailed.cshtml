@@ -1,0 +1,38 @@
+﻿@page "{personId:int}"
+@using Microsoft.AspNetCore.Http
+@model MoviesWebsite.Pages.Statistics.ActorMovieAverageRatingDetailedModel
+@{
+}
+
+@if (HttpContext.Session.GetString("JWToken") == null)
+{
+    <h4 class="display-4">You are not logged in.</h4>
+    <form method="POST">
+        <button type="submit" asp-page-handler="Login">Log in</button>
+    </form>
+}
+else if (Model.personInfo == null)
+{
+    <h4 class="display-4">This star or person does not exist in our database.</h4>
+    <form>
+        <button type="submit" asp-page-handler="Back">Go back</button>
+    </form>
+}
+else
+{
+    <h1>Rating information:</h1>
+    <div class="card mb-3" style="max-width: 800px;">
+        <div class="row no-gutters">
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">Rating Average:</h5>
+                    <p class="card-text"> @Model.personInfo.RatingAverage</p>
+                    <h5 class="card-title">Movies acted in:</h5>
+                    <p class="card-text"> @Model.personInfo.MoviesActedIn</p>
+                    <h5 class="card-title">Votes amount:</h5>
+                    <p class="card-text">@Model.personInfo.VotesSum</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
