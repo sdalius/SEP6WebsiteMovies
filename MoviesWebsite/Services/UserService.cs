@@ -195,5 +195,36 @@ namespace MoviesWebsite.Services
             Console.WriteLine("APIResponse, Error : " + APIResponse.StatusCode);
             return null;
         }
+
+        public DecadeRating CompareMoviesByDecades(string Token, int year)
+        {
+            if (Token == null || year < 0)
+            {
+                return null;
+            }
+            HttpClient hc = new();
+            hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var APIResponse = hc.GetAsync("https://movieapisep6.azurewebsites.net/Movies/CompareMoviesByDecades?year=" + year).Result;
+            if (APIResponse.IsSuccessStatusCode)
+            {
+                var JsonContent = APIResponse.Content.ReadAsStringAsync().Result;
+                try
+                {
+                    var makeObject = JsonConvert.DeserializeObject<List<DecadeRating>>(JsonContent);
+                    if (makeObject[0] != null) return makeObject[0];
+                }
+                catch (JsonSerializationException e)
+                {
+                    Console.WriteLine(e.Message);
+                    return null;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return null;
+                }
+            }
+            Console.WriteLine("APIResponse, Error : " + APIResponse.StatusCode);
+            return null;
+        }
     }
 }

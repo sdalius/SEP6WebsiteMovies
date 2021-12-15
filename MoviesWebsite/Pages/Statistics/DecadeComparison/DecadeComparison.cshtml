@@ -1,0 +1,58 @@
+﻿@page
+@model MoviesWebsite.Pages.Statistics.DecadeComparison.DecadeComparisonModel
+@{
+}
+<div class="text-center">
+    <h1 class="display-4">Decade comparison</h1>
+    @using (Html.BeginForm())
+    {
+        <p style="text-align:left">
+            Enter a year: <br /> @Html.TextBox("year1")
+        <p style="text-align:left">
+            Enter a year to compare with: <br /> @Html.TextBox("year2")
+        </p>
+        <input type="submit" value="Search" asp-page-handler="GetDecadeRatings" />
+        </p>
+    }
+    <table class="table">
+        <tr>
+            <th>Year</th>
+            <th>Number of movies</th>
+            <th>Number of votes</th>
+            <th>Average rating</th>
+        </tr>
+        @if (@Model.decadeRating1 != null)
+        {
+            <tr>
+                <td> @Model.year1</td>
+                <td>
+                    @Html.DisplayFor(e => e.decadeRating1.NumberOfMovies)
+                </td>
+                <td>
+                    @Html.DisplayFor(e => e.decadeRating1.NumberOfVotes)
+                </td>
+                <td>
+                    @Html.DisplayFor(e => e.decadeRating1.AverageRating)
+                </td>
+            </tr>
+        }
+        @if (@Model.decadeRating2 != null)
+        {
+            <tr>
+                <td> @Model.year2</td>
+                <td>
+                    @Html.DisplayFor(e => e.decadeRating2.NumberOfMovies)
+                </td>
+                <td>
+                    @Html.DisplayFor(e => e.decadeRating2.NumberOfVotes)
+                </td>
+                <td>
+                    @Html.DisplayFor(e => e.decadeRating2.AverageRating)
+                </td>
+            </tr>
+        }
+    </table>
+    <form>
+        <input type="button" onclick="history.go(-1)" value="Go back" />
+    </form>
+</div>

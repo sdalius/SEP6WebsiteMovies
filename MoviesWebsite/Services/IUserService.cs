@@ -17,5 +17,6 @@ namespace MoviesWebsite.Services
         List<Person> ReturnNumberOfStars(string Token, int numOfStars);
         List<Person> GetStarsAccordingToName(string Token, string name);
         StarRating StarRatingOfAllMoviesAsync(string Token, int star_id);
+        DecadeRating CompareMoviesByDecades(string Token, int year);
     }
 }
